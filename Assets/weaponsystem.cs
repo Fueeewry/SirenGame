@@ -18,8 +18,23 @@ public class skill
             case "shootanchor":
                 a = 0;
                 break;
-            case "shootfireball":
+            case "shoottrident":
                 a = 1;
+                break;
+            case "shootChainLightnings":
+                a = 2;
+                break;
+            case "shootfireball":
+                a = 3;
+                break;
+            case "shoottidalamulet":
+                a = 4;
+                break;
+            case "shootabysalchain":
+                a = 5;
+                break;
+            case "shootechoconch":
+                a = 6;
                 break;
         }
         return a;
@@ -29,14 +44,14 @@ public class skill
 public class weaponsystem : MonoBehaviour
 {
     public int skillcount = 2;
-    public GameObject[] anchors, fireballs;
+    public GameObject[] anchors, tridents, chainLightnings, fireballs, tidalamulets, abysalchains, echoconchs;
     List<skill> skillList = new List<skill>();
     public Transform head;
 
     int[] skillsLevels;
 
     void Start(){
-        skillsLevels = new int[6];
+        skillsLevels = new int[20];
     }
 
     public void addFunction(string a, float b){
@@ -63,10 +78,30 @@ public class weaponsystem : MonoBehaviour
         Instantiate(anchors[skillsLevels[0]], transform);
     }
 
+    void shoottrident(){
+        Instantiate(tridents[skillsLevels[1]], transform.position, head.rotation);
+    }
+
+    void shootChainLightnings(){
+        Instantiate(chainLightnings[skillsLevels[2]], transform.position, Quaternion.Euler(0,0,0));
+    }
+
     void shootfireball(){
-        Instantiate(fireballs[skillsLevels[1]], transform.position, head.rotation);
-        Instantiate(fireballs[skillsLevels[1]], transform.position, head.rotation * Quaternion.Euler(0,0,90));
-        Instantiate(fireballs[skillsLevels[1]], transform.position, head.rotation * Quaternion.Euler(0,0,-90));
-        Instantiate(fireballs[skillsLevels[1]], transform.position, head.rotation * Quaternion.Euler(0,0,180));
+        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation);
+        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,90));
+        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,-90));
+        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,180));
+    }
+
+    void shoottidalamulet(){
+        Instantiate(tidalamulets[skillsLevels[4]], transform);
+    }
+
+    void shootabysalchain(){
+        Instantiate(abysalchains[skillsLevels[5]], transform);
+    }
+
+    void shootechoconch(){
+        Instantiate(echoconchs[skillsLevels[6]], transform.position, head.rotation);
     }
 }
