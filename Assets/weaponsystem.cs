@@ -36,6 +36,21 @@ public class skill
             case "shootechoconch":
                 a = 6;
                 break;
+            case "getlightboots":
+                a = 0;
+                break;
+            case "getvitality":
+                a = 1;
+                break;
+            case "getbiggerradius":
+                a = 2;
+                break;
+            case "getsharperweaponry":
+                a = 3;
+                break;
+            case "getiframe":
+                a = 4;
+                break;
         }
         return a;
     }
@@ -47,11 +62,15 @@ public class weaponsystem : MonoBehaviour
     public GameObject[] anchors, tridents, chainLightnings, fireballs, tidalamulets, abysalchains, echoconchs;
     List<skill> skillList = new List<skill>();
     public Transform head;
+    public playermovement playermov;
+    float projectileSize = 1;
+    int pierceCount = 0;
 
-    int[] skillsLevels;
+    int[] skillsLevels, skillsLevelsPassive;
 
     void Start(){
         skillsLevels = new int[20];
+        skillsLevelsPassive = new int[20];
     }
 
     public void addFunction(string a, float b){
@@ -67,41 +86,94 @@ public class weaponsystem : MonoBehaviour
     public void resetSkill(){
         CancelInvoke();
         for(int i = 0; i<skillList.Count;i++){  
-            skillsLevels[skillList[i].getidx()] = skillList[i].skillLevel;
-            InvokeRepeating(skillList[i].skillFunctionName, 0.1f, skillList[i].skillCooldown);
+            if(skillList[i].skillCooldown > 0){
+                skillsLevels[skillList[i].getidx()] = skillList[i].skillLevel;
+                InvokeRepeating(skillList[i].skillFunctionName, 0.1f, skillList[i].skillCooldown);
+            }else{
+                skillsLevelsPassive[skillList[i].getidx()] = skillList[i].skillLevel;
+                Invoke(skillList[i].skillFunctionName, 0.1f);
+            }
         }
     }
 
     //=========================================================================================================//
 
+    void getlightboots(){
+        if(skillsLevelsPassive[0] < 6){
+            playermov.speed += 0.15f;
+        }else{
+            playermov.speed += 0.1f;
+        }
+    }
+
+    void getvitality(){
+        playermov.healthbar.maxValue += 20;
+        playermov.healthbar.value += 20;
+    }
+
+    void getbiggerradius(){
+        projectileSize += 0.15f;
+    }
+
+    void getsharperweaponry(){
+        pierceCount += 1;
+    }
+
+    void getiframe(){
+        playermov.iframeTime += 1;
+    }
+
+
+    //=========================================================================================================//
+
     void shootanchor(){
-        Instantiate(anchors[skillsLevels[0]], transform);
+        GameObject a = Instantiate(anchors[skillsLevels[0]], transform);
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
     }
 
     void shoottrident(){
-        Instantiate(tridents[skillsLevels[1]], transform.position, head.rotation);
+        GameObject a = Instantiate(tridents[skillsLevels[1]], transform.position, head.rotation);
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
     }
 
     void shootChainLightnings(){
-        Instantiate(chainLightnings[skillsLevels[2]], transform.position, Quaternion.Euler(0,0,0));
+        GameObject a = Instantiate(chainLightnings[skillsLevels[2]], transform.position, Quaternion.Euler(0,0,0));
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
     }
 
     void shootfireball(){
-        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation);
-        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,90));
-        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,-90));
-        Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,180));
-    }
+        GameObject a = Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,0));
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
+        a = Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,90));
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
+        a = Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,-90));
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
+        a = Instantiate(fireballs[skillsLevels[3]], transform.position, head.rotation * Quaternion.Euler(0,0,180));
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
+    }   
 
     void shoottidalamulet(){
-        Instantiate(tidalamulets[skillsLevels[4]], transform);
+        GameObject a = Instantiate(tidalamulets[skillsLevels[4]], transform);
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
     }
 
     void shootabysalchain(){
-        Instantiate(abysalchains[skillsLevels[5]], transform);
+        GameObject a = Instantiate(abysalchains[skillsLevels[5]], transform);
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
     }
 
     void shootechoconch(){
-        Instantiate(echoconchs[skillsLevels[6]], transform.position, head.rotation);
+        GameObject a = Instantiate(echoconchs[skillsLevels[6]], transform.position, head.rotation);
+        a.transform.localScale *= projectileSize;
+        a.GetComponent<damagedetection>().pierce += pierceCount;
     }
 }

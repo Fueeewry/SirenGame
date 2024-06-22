@@ -17,11 +17,14 @@ public class playermovement : MonoBehaviour
     public TMP_Text exptext, timertxt;
     public weaponsystem weaponsys;
     public int level = 1, TIMENEEDED = 180;
+    public float iframeTime = 0;
 
     public void reducedby(){}
     public void restorespeed(){}
     public void vulnerable(){}
     public void restorevulnerable(){}
+
+    bool iframe = false;
 
     void Start(){
         InvokeRepeating("SpawnEnemy", 1, 5);
@@ -44,6 +47,11 @@ public class playermovement : MonoBehaviour
 
     public void damaged(int damage){
         healthbar.value -= damage;
+    }
+    IEnumerator iframeActivated(){
+        iframe = true;
+        yield return new WaitForSeconds(iframeTime);
+        iframe = true;
     }
 
     void OnParticleCollision(GameObject other){
